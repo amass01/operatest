@@ -25,10 +25,20 @@ app.get('/add/:res', function(req, res){
             client.end()
         });
     });
-
-
-
 });
+
+app.get('/res', function(req, res){
+    query = client.query('SELECT * FROM pg_equipment');
+    query.on('row', function(result) {
+        console.log(result);
+        if (!result) {
+            return res.send('No data found');
+        } else {
+            res.send('result logged: ' + result.count);
+        }
+    });
+});
+
 
 //app.get('/install', function(req, res){
 //    pg.connect(process.env.DATABASE_URL, function(err, client) {
