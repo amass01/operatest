@@ -24,8 +24,6 @@ app.get('/add/:res', function(req, res){
             res.send('record added');
             client.end()
         });
-        query.on('error', function(row) {
-
     });
 
 
