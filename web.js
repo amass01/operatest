@@ -33,7 +33,7 @@ app.get('/res', function(req, res){
         query.on('row', function(result) {
             console.log(result);
         });
-        query.on('end', function() {
+        query.on('end', function(result) {
             res.send(result.rowCount + ' rows were received');
         });
     });
