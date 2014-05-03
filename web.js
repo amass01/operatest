@@ -20,8 +20,8 @@ app.get('/add/:res', function(req, res){
 
     pg.connect(process.env.DATABASE_URL, function(err, client) {
         var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [agent, req.param('res'), date]);
+        client.end();
         query.on('end', function() {
-            client.end();
             res.send('record added');
         });
     });
@@ -29,9 +29,12 @@ app.get('/add/:res', function(req, res){
 
 app.get('/res', function(req, res){
         pg.connect(process.env.DATABASE_URL, function(err, client) {
-        query = client.query('SELECT * FROM pg_equipment');
+        var query = client.query('SELECT * FROM pg_equipment');
         query.on('row', function(result) {
             console.log(result);
+        });
+        query.on('end', function() {
+            res.send(result.rowCount + ' rows were received');
         });
     });
 });
