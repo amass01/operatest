@@ -15,14 +15,16 @@ app.get('/', function(req, res){
 app.get('/add/:res', function(req, res){
     console.log('userAgent: ' + req.headers['user-agent']);
     console.log(req.param('res'));
-    pg.connect(process.env.DATABASE_URL, function(err, client) {
-        console.log('ddddddddddddddddddddddd');
-        var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [req.headers['user-agent'], req.param('res'),  new Date()]);
+    var client = new pg.Client(DATABASE_URL);
+    client.connect();
+//    pg.connect(process.env.DATABASE_URL, function(err, client) {
+    console.log('ddddddddddddddddddddddd');
+    var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [req.headers['user-agent'], req.param('res'),  new Date()]);
+    query.on('end', function() {
+        res.send('record added');
         client.end();
-        query.on('end', function() {
-            res.send('record added');
         });
-    });
+//    });
 });
 
 app.get('/res', function(req, res){
