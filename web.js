@@ -94,13 +94,13 @@ app.get('/res/:agent', function(req, res){
 app.get('/sets/:agent', function(req, res){
     pg.connect(process.env.DATABASE_URL, function(err, client) {
         pg.connect(process.env.DATABASE_URL, function(err, client) {
-            var query = client.query('SELECT count(*) FROM pg_equipment WHERE agent LIKE % $1 %)' ,[req.param('agent')]);
+            var query = client.query('SELECT count(*) as count FROM pg_equipment WHERE agent = LIKE %$1%)' ,[req.param('agent')]);
             query.on('end', function(result) {
                 if (!result) {
                     return res.send('No data found');
                 }
                 else {
-                    res.send(result +"\n" + result.rowCount + ' rows were received');
+                    res.send(result +"\n" + result.count + ' rows were received');
                 }
             });
         });
