@@ -35,7 +35,6 @@ app.get('/res', function(req, res){
         });
         query.on('end', function(result) {
             res.send(result.rowCount + ' rows were received');
-            client.end();
         });
     });
 });
