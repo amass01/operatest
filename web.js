@@ -88,7 +88,7 @@ app.get('/sets/:agent', function(req, res){
         }
         else {
             console.log(result);
-            res.send(result.count);
+            res.send('record added');
         }
     });
     query.on('end', function() {
