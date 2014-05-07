@@ -19,6 +19,7 @@ app.get('/add/:res', function(req, res){
     var agent = req.headers['user-agent'];
 
     pg.connect(process.env.DATABASE_URL, function(err, client) {
+        console.log('ddddddddddddddddddddddd');
         var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [agent, req.param('res'), date]);
         client.end();
         query.on('end', function() {
