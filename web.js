@@ -19,7 +19,7 @@ app.get('/add/:res', function(req, res){
     var agent = req.headers['user-agent'];
 
     pg.connect(process.env.DATABASE_URL, function(err, client) {
-        var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [agent, req.param('res'), date.toDateString() + " " + date.toLocaleTimeString()]);
+        var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [agent, req.param('res'), date]);
         client.end();
         query.on('end', function() {
             res.send('record added');
@@ -78,8 +78,8 @@ app.get('/res/:agent', function(req, res){
 app.get('/sets/:agent', function(req, res){
     pg.connect(process.env.DATABASE_URL, function(err, client) {
         console.log(req.param('agent'));
-        console.log("SELECT count(*) as count FROM pg_equipment WHERE 'agent' LIKE '%"+ req.param('agent')+ "%'");
-        var query = client.query("SELECT count(*) as count FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");//WHERE time LIKE '%"+ req.param('agent')+ "%'");
+        console.log("SELECT count(*) as count FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");
+        var query = client.query("SELECT count(*) as count FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");
         query.on('row', function(result) {
             if (!result) {
                 return res.send('No data found');
