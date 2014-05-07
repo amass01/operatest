@@ -15,12 +15,11 @@ app.get('/', function(req, res){
 app.get('/add/:res', function(req, res){
     console.log('userAgent: ' + req.headers['user-agent']);
     console.log(req.param('res'));
-    var now = new Date();
-    var date = now.format("dd/M/yy h:mm tt");
+    var date = new Date();
     var agent = req.headers['user-agent'];
 
     pg.connect(process.env.DATABASE_URL, function(err, client) {
-        var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [agent, req.param('res'), date]);
+        var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [agent, req.param('res'), date.toDateString() + " " + date.toLocaleTimeString()]);
         client.end();
         query.on('end', function() {
             res.send('record added');
@@ -102,7 +101,7 @@ app.get('/sets/:agent', function(req, res){
             }
             else {
                 console.log(result);
-                res.send(result.count + ' rows were received');
+                res.send(result.count);
             }
         });
     });
