@@ -91,10 +91,6 @@ app.get('/sets/:agent', function(req, res){
             res.send(result.mycount);
         }
     });
-    query.on('end', function() {
-        client.end();
-    });
-
 });
 
 
