@@ -101,6 +101,7 @@ app.get('/sets/:agent', function(req, res){
                 return res.send('No data found');
             }
             else {
+                console.log(result);
                 res.send(result.count + ' rows were received');
             }
         });
