@@ -65,7 +65,7 @@ app.get('/res/:agent', function(req, res){
         var query = client.query("SELECT time as time FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");//WHERE time LIKE '%"+ req.param('agent')+ "%'");
         var rows = ""
         query.on('row', function(result) {
-            rows = rows + result.time + ' ';
+            rows = rows + result.time + ',';
         });
         query.on('end', function(result) {
             if (!result) {
