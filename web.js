@@ -62,14 +62,18 @@ app.get('/res/:agent', function(req, res){
     pg.connect(process.env.DATABASE_URL, function(err, client) {
         console.log(req.param('agent'));
         console.log("SELECT * FROM pg_equipment WHERE 'agent' LIKE '%"+ req.param('agent')+ "%'");
-        var query = client.query("SELECT * FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");//WHERE time LIKE '%"+ req.param('agent')+ "%'");
+        var query = client.query("SELECT time as time FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");//WHERE time LIKE '%"+ req.param('agent')+ "%'");
+        var rows = ""
+        query.on('row', function(result) {
+            rows = rows + result.time;
+        });
         query.on('end', function(result) {
             if (!result) {
                 return res.send('No data found');
             }
             else {
-                console.log(result);
-                res.send(String(result));
+                console.log(rows);
+                res.send(rows);
             }
         });
     });
