@@ -41,22 +41,22 @@ app.get('/res', function(req, res){
 });
 
 
-app.get('/install', function(req, res){
-    pg.connect(process.env.DATABASE_URL, function(err, client) {
-
-        var query = client.query('CREATE TABLE sets ( \
-                agent varchar(400) PRIMARY KEY,\
-                number int \
-            );'
-        );
-        query.on('end', function() {
-            console.log("sddd");
-            client.end()
-            res.send('table created');
-        });
-    });
-
-});
+//app.get('/install', function(req, res){
+//    pg.connect(process.env.DATABASE_URL, function(err, client) {
+//
+//        var query = client.query('CREATE TABLE sets ( \
+//                agent varchar(400) PRIMARY KEY,\
+//                number int \
+//            );'
+//        );
+//        query.on('end', function() {
+//            console.log("sddd");
+//            client.end()
+//            res.send('table created');
+//        });
+//    });
+//
+//});
 
 app.get('/update/:agent', function(req, res){
     pg.connect(process.env.DATABASE_URL, function(err, client) {
@@ -94,7 +94,7 @@ app.get('/res/:agent', function(req, res){
 app.get('/sets/:agent', function(req, res){
     pg.connect(process.env.DATABASE_URL, function(err, client) {
         pg.connect(process.env.DATABASE_URL, function(err, client) {
-            var query = client.query('SELECT * FROM sets WHERE agent = "%s"' ,req.param('agent'));
+            var query = client.query('SELECT count(*) FROM pg_equipment WHERE agent = "%s"' ,req.param('agent'));
             query.on('end', function(result) {
                 if (!result) {
                     return res.send('No data found');
