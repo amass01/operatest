@@ -77,7 +77,7 @@ app.get('/update/:agent', function(req, res){
 app.get('/res/:agent', function(req, res){
     pg.connect(process.env.DATABASE_URL, function(err, client) {
         pg.connect(process.env.DATABASE_URL, function(err, client) {
-            var query = client.query('SELECT * FROM pg_equipment WHERE agent = "%s"' ,req.param('agent'));
+            var query = client.query('SELECT * FROM pg_equipment WHERE agent = "$1"' ,[req.param('agent')]);
             query.on('end', function(result) {
                 if (!result) {
                     return res.send('No data found');
@@ -94,7 +94,7 @@ app.get('/res/:agent', function(req, res){
 app.get('/sets/:agent', function(req, res){
     pg.connect(process.env.DATABASE_URL, function(err, client) {
         pg.connect(process.env.DATABASE_URL, function(err, client) {
-            var query = client.query('SELECT count(*) FROM pg_equipment WHERE agent = "%s"' ,req.param('agent'));
+            var query = client.query('SELECT count(*) FROM pg_equipment WHERE agent LIKE % $1 %)' ,[req.param('agent')]);
             query.on('end', function(result) {
                 if (!result) {
                     return res.send('No data found');
