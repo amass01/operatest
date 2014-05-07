@@ -35,6 +35,7 @@ app.get('/res', function(req, res){
         });
         query.on('end', function(result) {
             res.send(result.rowCount + ' rows were received');
+            client.end();
         });
     });
 });
@@ -76,19 +77,22 @@ app.get('/res/:agent', function(req, res){
 });
 
 app.get('/sets/:agent', function(req, res){
-    pg.connect(process.env.DATABASE_URL, function(err, client) {
-        console.log(req.param('agent'));
-        console.log("SELECT count(*) as count FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");
-        var query = client.query("SELECT count(*) as count FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");
-        query.on('row', function(result) {
-            if (!result) {
-                return res.send('No data found');
-            }
-            else {
-                console.log(result);
-                res.send(result.count);
-            }
-        });
+    var client = new pg.Client(DATABASE_URL);
+    client.connect();
+    console.log(req.param('agent'));
+    console.log("SELECT count(*) as count FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");
+    var query = client.query("SELECT count(*) as count FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");
+    query.on('row', function(result) {
+        if (!result) {
+            return res.send('No data found');
+        }
+        else {
+            console.log(result);
+            res.send(result.count);
+        }
+    });
+    query.on('end', function() {
+        client.end();
     });
 
 });
