@@ -15,12 +15,9 @@ app.get('/', function(req, res){
 app.get('/add/:res', function(req, res){
     console.log('userAgent: ' + req.headers['user-agent']);
     console.log(req.param('res'));
-    var date = new Date();
-    var agent = req.headers['user-agent'];
-
     pg.connect(process.env.DATABASE_URL, function(err, client) {
         console.log('ddddddddddddddddddddddd');
-        var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [agent, req.param('res'), date]);
+        var query = client.query('INSERT INTO pg_equipment(agent, time, date) VALUES($1,$2,$3)', [req.headers['user-agent'], req.param('res'),  new Date()]);
         client.end();
         query.on('end', function() {
             res.send('record added');
