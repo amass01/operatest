@@ -84,7 +84,7 @@ app.get('/sets/:agent', function(req, res){
     client.connect();
     console.log(req.param('agent'));
     console.log("SELECT count(*) as count FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ ".*'");
-    var query = client.query("SELECT count(*) as mycount FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ "\D.*'");
+    var query = client.query("SELECT count(*) as mycount FROM pg_equipment WHERE agent ~* '.*"+ req.param('agent')+ "\\D.*'");
     query.on('row', function(result) {
         if (!result) {
             return res.send('No data found');
